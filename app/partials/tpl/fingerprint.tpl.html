@@ -1,0 +1,219 @@
+
+
+
+<div class="bs-example">
+<form role="form" name="form2">
+<div>
+  <div class="container">
+    <div class="page-header">
+      <h1><img src="img/IFPI_160x40.gif" /><small>UGC Monitoring - {{store.config.environment}} -</small></h1>
+    </div>
+
+  <div class="myContainer" >
+    <div class="rows">
+      <div class="col-xs-12 col-sm-5 col-filtering">
+        <h4>Filter</h4>
+        <fieldset>
+        <p>
+        <label for="results">UGC Results</label>
+        <select id="results" name="results" ng-model="store.results">
+          <option value="false">Pending</option>
+          <option value="true">Processed</option>
+        </select>        
+        
+        <label for="platform">Platform </label>
+        <select id="platform" name="platform" ng-model="platform">
+          <!--<option value="ALL">All</option>-->
+          <option value="YouTube">YouTube</option>
+          <option value="Soundcloud">SoundCloud</option> 
+          <option value="DailyMotion">DailyMotion</option> 
+          <option value="Vimeo">Vimeo</option> 
+        </select>
+       </p>
+
+        <p>
+            <label for="artist">Artist </label>
+            <select id="artist" name="artist" ng-model="artist" ng-options="artist.artist as artist.artist for artist in artists">
+              <option value="">-- All Artists --</option>
+            </select>
+        </p>
+        <p>
+            <label for="track">Track </label>
+            <select id="track" name="track" ng-model="track" ng-options="title.titlename as title.titlename for title in tracks">
+              <option value="">-- All Titles --</option>
+            </select>
+        </p>
+
+       
+      </fieldset>
+      </div>
+      <div class="col-xs-12 col-sm-3 col-sorting">
+        <h4>Rows</h4>
+        <fieldset>
+        <p>
+        <label for="numrows">Number of Rows</label>        
+        <select id="numrows" name="numrows" ng-model="store.numrows">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option> 
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+        </select>
+        </p>
+        </fieldset>
+      </div>
+      <div class="col-xs-12 col-sm-3 col-status">
+       <h4>Status</h4>
+        <p>Total Hits Pending = <span ng-class="{'warn-red':total != 0}">{{total}}</span></p>
+            <span ng-click="store.refreshDashboardDetails(store)" class="glyphicon glyphicon glyphicon-list-alt" data-toggle="modal" data-target="#statusdetails" ></span>
+
+        <p>IAPS Uploads Pending = <span ng-class="{'warn-orange':iapstotal != 0}">{{iapstotal}}</span></p>
+
+
+      </div>
+
+    </div><!--rows-->      
+    <br/>
+    <br/>
+    <div class="rows">
+     <div class="col-xs-12 col-sm-4 col-media">
+      <span>
+       <button class="btn btn-primary refreshdata" ng-click="reload()">Refresh Data</button>
+       </span>
+       <!-- Media Component -->
+       <div class="media mediaframe" >
+         <div class="media-body">
+            <!-- <td ng-show="{{store.playerlink.indexOf('youtube') >= 0}}"> -->
+            <iframe class="youtube" width="100%" height="300" ng-src="{{store.playerlink}}"  frameborder="0" ></iframe>
+            <h4 class="media-heading">url:</h4>
+            <p><a href="{{store.playerurl}}" target="_blank">{{store.playerurl}}</a></p>
+         </div>
+       </div><!--mediaframe-->
+    </div>
+    <div class="col-xs-12 col-sm-8 col-records" >
+        <h4 class="records-header">UGC Results</h4>
+     
+        <div class="scroll">
+        <table class="table table-condensed" >
+        <thead>
+          <tr>
+            <th></th>
+            <th>Artist</th>
+            <th>Title</th>
+            <th>Owner</th>
+            <th>Infringing</th>
+            <th>Comments</th>        
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="product in products | orderBy:['supervised.artist','supervised.titlename']" 
+            ng-class="{'pending-delete': product.supervised.date != undefined, 'processed': results == 'true'}"
+            ng-click="setPlayerLink(product)">
+      
+          <td ng-hide="true"><input type="text" ng-model="product.link"/></td>
+          <td ng-class="{selected: product._id === selectedrow}">
+             <button ng-click="setPlayerLink(product);" type="button" class="btn btn-xs" aria-label="Left Align">
+                <span class="glyphicon glyphicon-headphones" aria-hidden="true"></span>
+             </button>
+
+          </td>
+          <!-- <td><input type="text" ng-model="product._id"></input></td> -->
+          <td><input type="text" ng-model="product.supervised.artist"/></td>
+          <td><input type="text" ng-model="product.supervised.titlename"/></td>
+          <td><input type="text" ng-model="product.supervised.owner"/></td>
+          <td><input type="checkbox" ng-model="product.supervised.infringing"/>
+              <span ng-show="product.supervised['iaps-uploaded'] > 0" title="iaps-id">{{product.supervised['iaps-uploaded']}}</span>
+          </td>
+          <td><textarea rows="2" ng-model="product.supervised.comments"></textarea></td>
+<td><button ng-click="save(product)">
+                <span title="Save" class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                  </button>
+                      </td>
+
+        </tr> 
+        </tbody>
+        </table>
+        </div>
+
+        <div class="submit">
+            <!--<button class="btn btn-primary iapsupload" ng-click="store.iapsUpload(store)"><span>IAPS Upload </span><span class="glyphicon glyphicon-upload"></span></button>-->
+            <button class="btn btn-primary iapsupload" ng-click="iapsUpload(store);"><span>IAPS Upload </span><span class="glyphicon glyphicon-upload"></span></button>
+        </div>
+        <div ng-show="!expired">
+         <div ng-show="uploadmessagetype == 1" class="alert alert-info  " role="alert">Successfully Uploaded {{uploadplatform}} records</div>
+                  <div ng-show="uploadmessagetype == 2" class="alert alert-danger" role="alert">Error Uploading {{uploadplatform}} records  </div>
+                  <div ng-show="uploadmessagetype == 3" class="alert alert-warning" role="alert">No new infringing records for {{uploadplatform}} to upload to IAPS.</div>
+                  <div ng-show="uploadmessagetype == 4" class="alert alert-danger" role="alert">Failure calling IAPS Upload Service for {{uploadplatform}}.</div>
+                  <div ng-show="uploadmessagetype == 5" class="alert alert-danger" role="alert">Error retrieving supervised records for {{uploadplatform}}.
+
+                  </div>
+                  </div>
+
+    </div><!--col-records-->
+   </div><!--rows-->
+
+  
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="statusdetails" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">times</button>
+                  <h4 class="modal-title">Status Details</h4>
+              </div>
+              <div class="modal-body">
+                  <div class="container modal-background">
+                      <div class="row text-center">
+                          <div class="col-xs-3 dialcol1">
+                              <h5 class="modal-text-header">Platform</h5>
+                              <h6>You Tube</h6>
+                              <h6>SoundCloud</h6>
+                              <h6>DailyMotion</h6>
+                              <h6>Vimeo</h6>
+                          </div>
+                          <div class="col-xs-4 dialcol2">
+                              <h5 class="modal-text-header">Hits Pending</h5>
+                              <h6><span ng-class="{'warn-red':store.hits_youtube != 0}">{{store.hits_youtube}}</span></h6>
+                              <h6><span ng-class="{'warn-red':store.hits_soundcloud != 0}">{{store.hits_soundcloud}}</span></h6>
+                              <h6><span ng-class="{'warn-red':store.hits_dailymotion != 0}">{{store.hits_dailymotion}}</span></h6>
+                              <h6><span ng-class="{'warn-red':store.hits_vimeo != 0}">{{store.hits_vimeo}}</span></h6>
+                          </div>
+                          <div class="col-xs-5 dialcol3">
+                              <h5 class="modal-text-header">Uploads Pending</h5>
+                              <h6><span ng-class="{'warn-orange':store.iaps_youtube != 0}">{{store.iaps_youtube}}</span></h6>
+                              <h6><span ng-class="{'warn-orange':store.iaps_soundcloud != 0}">{{store.iaps_soundcloud}}</span></h6>
+                              <h6><span ng-class="{'warn-orange':store.iaps_dailymotion != 0}">{{store.iaps_dailymotion}}</span></h6>
+                              <h6><span ng-class="{'warn-orange':store.iaps_vimeo != 0}">{{store.iaps_vimeo}}</span></h6>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+  </div><!--myContainer-->
+
+</div><!--container-->
+
+
+
+
+
+
+
+
+
+</div>
+</form>
+</div>
+

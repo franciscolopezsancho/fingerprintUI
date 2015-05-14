@@ -1,0 +1,193 @@
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Irma Text Light';
+}
+p, div,td,th {
+    font-family: 'Irma Text Light';
+    font-size:12px
+}
+
+
+div.myContainer {
+  padding-top: 20px;  /*60px to make the container make room for the navigation bar */
+}
+
+tr.pending-delete, tr.pending-delete input, tr.pending-delete textarea, tr.pending-delete span {
+   background-color: White;   
+   color: DarkGrey;
+   opacity: 0.90;
+}
+
+tr.pending-delete button {
+   opacity: 0.5;
+}
+
+tr.processed td{
+   color: grey;
+}
+
+.col-filtering, .col-sorting {
+    height:140px;
+    background-color: #6BC0FF;
+    background-image: linear-gradient(165deg, LightSkyBlue,White 50%);         /* Standard syntax */
+}
+
+.refreshdata {
+    margin-top: 20px;
+    margin-left: 25%;
+    width: 50%;
+}
+
+label {
+    margin-right: 0.5em;
+}
+
+.col-status {
+    height:140px;
+    background-color: MistyRose;
+    background-image: linear-gradient(165deg, MistyRose ,White 50%);         /* Standard syntax */
+}
+
+.warn-red {
+    color:PaleVioletRed;
+    font-weight: 600;
+}
+
+.warn-orange {
+    color:darkorange;
+    font-weight: 600;
+}
+
+.col-media {
+	color: grey;
+	height:500px;
+}
+
+.mediaframe {
+  width:100%;
+	margin-top: 35px;
+	padding:8px;
+    border:0.1em solid pink;
+    background-image: linear-gradient(145deg, MistyRose, White);   
+}
+
+.col-records {
+    height:500px;
+    margin-top: 10px;
+    border:0.1em solid LightSkyBlue;
+    background-color: AliceBlue;
+    background-image: linear-gradient(White,AliceBlue);         /* Standard syntax */
+}
+
+.col-records .table>tbody>tr>td {
+	vertical-align: middle;
+    color: SteelBlue;
+}
+
+.col-records input, .col-records textarea {
+	  width:100%;
+    background-color: AliceBlue;
+}
+
+.scroll {
+	margin-top: 30px;
+	overflow-y:auto; 
+	height:400px;
+}
+
+.selected {
+	background-color:white; box-shadow: 0 0 25px LightSkyBlue inset !important;
+}
+
+tr:hover { 
+  background-color:white; 
+  /* known Chrome bug.. box-shadow not working on Chrome within table tr, unless display:block;
+  /*box-shadow: 0 0 15px MistyRose inset !important; */
+  /*fix.. use linear gradient */
+  /*background-image: linear-gradient(#FFF0EF, White 20%, White, #FFF0EF); */
+  background-image: linear-gradient(#DBF0FD, White 30%, White 65%, #DBF0FD); 
+}
+
+tr:hover td input, tr:hover td textarea  { 
+	background-color:white;
+}
+
+.glyphicon-headphones {
+	color: SteelBlue;
+}
+
+.glyphicon-floppy-disk {
+	color: PaleVioletRed;
+}
+
+.glyphicon-list-alt {
+    color: SteelBlue;
+}
+
+.records-header {
+    text-shadow: 10px 10px 50px LightSkyBlue;
+}
+
+.iapsupload {
+    float: right;
+    margin-top:20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+
+.modal-header {
+    color: white;
+    background-color: SteelBlue;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.modal.fade{
+    padding-top: 200px;
+    -webkit-transition: opacity 0.6s linear;
+    -moz-transition: opacity 0.6s linear;
+    -o-transition: opacity 0.6s linear;
+    transition: opacity 0.6s linear;
+}
+
+.modal-background{
+    background-color: MistyRose;
+    background-image: linear-gradient(165deg, MistyRose ,White 60%);
+}
+
+.modal-text-header{
+    color: SteelBlue;
+    font-weight: 600;
+}
+
+a:link, a:visited {
+  color:SteelBlue;
+}     
+
+a:hover {
+  text-decoration:underline;
+}  
+
+/* appply some centering to fluid layout */
+@media (min-width: 1200px) {
+    .container-fluid {
+      margin: 6%;
+    }
+    .container {
+      width: 90%;
+    }
+}
+
+/* appply tablet|mobile styling to fluid layout */
+@media (max-width: 991px) {
+  .col-filtering, .col-sorting, .col-status  {
+      height:100px;
+  }
+
+  .mediaframe {
+      margin-top: 20px;
+  }
+}
+
+
+
